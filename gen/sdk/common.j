@@ -152,6 +152,7 @@ type movetype extends flagtype
 type pathingaitype extends flagtype
 type collisiontype extends flagtype
 type targetflag extends flagtype
+type damageflag extends flagtype
 type unitcategory extends flagtype
 type pathingflag extends flagtype
 type layoutstyleflag extends flagtype
@@ -160,6 +161,7 @@ type layerstyleflag extends flagtype
 type controlstyleflag extends flagtype
 type framestate extends flagtype
 type abilitytype extends flagtype
+type itemdisableflag extends flagtype
 type armortype extends handle
 type heroattribute extends handle
 type defensetype extends handle
@@ -260,6 +262,7 @@ constant native ConvertMoveType takes integer i returns movetype
 constant native ConvertPathingAIType takes integer i returns pathingaitype
 constant native ConvertCollisionType takes integer i returns collisiontype
 constant native ConvertTargetFlag takes integer i returns targetflag
+constant native ConvertDamageFlag takes integer i returns damageflag
 constant native ConvertArmorType takes integer i returns armortype
 constant native ConvertHeroAttribute takes integer i returns heroattribute
 constant native ConvertDefenseType takes integer i returns defensetype
@@ -275,6 +278,7 @@ constant native ConvertLayerStyleFlag takes integer i returns layerstyleflag
 constant native ConvertControlStyleFlag takes integer i returns controlstyleflag
 constant native ConvertFrameState takes integer i returns framestate
 constant native ConvertAbilityType takes integer i returns abilitytype
+constant native ConvertItemDisableFlag takes integer i returns itemdisableflag
 constant native ConvertConnectionType takes integer i returns connectiontype
 constant native ConvertTradeState takes integer i returns tradestate
 
@@ -1734,6 +1738,18 @@ constant abilityintegerlevelfield	ABILITY_ILF_SPAWN_UNIT_ID_NFYU = ConvertAbilit
 constant abilityintegerlevelfield	ABILITY_ILF_DESTRUCTIBLE_ID = ConvertAbilityIntegerLevelField('Nvcu')
 constant abilityintegerlevelfield	ABILITY_ILF_UPGRADE_TYPE = ConvertAbilityIntegerLevelField('Iglu')
 
+// These are always reals, even though some are later used as integer/boolean and such, so true/false = 1./0. same goes to integers.
+// Note: these can be used in natives that do not handle levels, since these always exist anyways. Or use ConvertAbilityXField with GetHandleId of these constants.
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_A = ConvertAbilityRealLevelField('adfA')
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_B = ConvertAbilityRealLevelField('adfB')
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_C = ConvertAbilityRealLevelField('adfC')
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_D = ConvertAbilityRealLevelField('adfD')
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_E = ConvertAbilityRealLevelField('adfE')
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_F = ConvertAbilityRealLevelField('adfF')
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_G = ConvertAbilityRealLevelField('adfG')
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_H = ConvertAbilityRealLevelField('adfH')
+constant abilityreallevelfield ABILITY_RLF_DATA_FIELD_I = ConvertAbilityRealLevelField('adfI')
+
 constant abilityreallevelfield ABILITY_RLF_CASTING_TIME = ConvertAbilityRealLevelField('acas')
 constant abilityreallevelfield ABILITY_RLF_CAST_BACK_SWING = ConvertAbilityRealLevelField('acbs')
 constant abilityreallevelfield ABILITY_RLF_CAST_POINT = ConvertAbilityRealLevelField('acpt')
@@ -2545,6 +2561,21 @@ constant targetflag TARGET_FLAG_NON_ANCIENT = ConvertTargetFlag(1073741824)
 constant targetflag TARGET_FLAG_ANCIENT = ConvertTargetFlag(2147483648)
 constant targetflag TARGET_FLAG_EMPTY = ConvertTargetFlag(4294967295)
 
+// Damage Flag
+constant damageflag DAMAGE_FLAG_MELEE = ConvertDamageFlag(0)
+constant damageflag DAMAGE_FLAG_RANGED = ConvertDamageFlag(1)
+constant damageflag DAMAGE_FLAG_IGNORE_SOURCE = ConvertDamageFlag(2)
+constant damageflag DAMAGE_FLAG_CALL_FOR_HELP = ConvertDamageFlag(4)
+constant damageflag DAMAGE_FLAG_EXPLOSION = ConvertDamageFlag(8)
+constant damageflag DAMAGE_FLAG_NOTIFY_ONLY = ConvertDamageFlag(16)
+constant damageflag DAMAGE_FLAG_INVULNERABLE = ConvertDamageFlag(32)
+constant damageflag DAMAGE_FLAG_DONT_CALL_FOR_HELP = ConvertDamageFlag(64)
+constant damageflag DAMAGE_FLAG_ATTACK_ONCE = ConvertDamageFlag(128)
+constant damageflag DAMAGE_FLAG_ATTACK = ConvertDamageFlag(256)
+constant damageflag DAMAGE_FLAG_NO_PLAYER_MESSAGE = ConvertDamageFlag(512)
+constant damageflag DAMAGE_FLAG_NEVER_MISS = ConvertDamageFlag(1024)
+constant damageflag DAMAGE_FLAG_ACTUAL_ATTACK = ConvertDamageFlag(1073741824)
+
 // ability types
 constant abilitytype ABILITY_TYPE_POSITIVE = ConvertAbilityType(0)
 constant abilitytype ABILITY_TYPE_NEGATIVE = ConvertAbilityType(1)
@@ -2554,6 +2585,15 @@ constant abilitytype ABILITY_TYPE_TIMED_LIFE = ConvertAbilityType(4)
 constant abilitytype ABILITY_TYPE_PHYSICAL = ConvertAbilityType(5)
 constant abilitytype ABILITY_TYPE_MAGICAL = ConvertAbilityType(6)
 constant abilitytype ABILITY_TYPE_AUTODISPEL = ConvertAbilityType(7)
+
+// item disable flags
+constant itemdisableflag ITEM_DISABLE_FLAG_BASIC = ConvertItemDisableFlag(1) // basic disable/enable call.
+constant itemdisableflag ITEM_DISABLE_FLAG_SPELLBOOK = ConvertItemDisableFlag(2) // any ability that contains other abilities.
+constant itemdisableflag ITEM_DISABLE_FLAG_BONUSES = ConvertItemDisableFlag(4) // for complex abilities that provide percent changes.
+constant itemdisableflag ITEM_DISABLE_FLAG_ORDERS = ConvertItemDisableFlag(8) // for active abilities, making item's ability non-usable. Does not prevent item clicking with left/right mouse.
+constant itemdisableflag ITEM_DISABLE_FLAG_DIRECT_BONUSES = ConvertItemDisableFlag(16) // for abilities that only provide stat bonuses.
+constant itemdisableflag ITEM_DISABLE_FLAG_AFFECT_UI = ConvertItemDisableFlag(32) // should ability disable/hide count be even processed.
+constant itemdisableflag ITEM_DISABLE_FLAG_COUNT = ConvertItemDisableFlag(64) // actually inc/dec count when enabled/disabled.
 
 // defense type
 constant defensetype DEFENSE_TYPE_LIGHT = ConvertDefenseType(0)
@@ -4382,6 +4422,8 @@ native BitwiseShiftRight takes integer i, integer bitsToShift returns integer
 native BitwiseShiftRightLogical takes integer i, integer bitsToShift returns integer
 native BitwiseToInteger takes integer byte1, integer byte2, integer byte3, integer byte4 returns integer
 
+native B2I takes boolean b returns integer
+native B2S takes boolean b returns string
 native Id2String takes integer i returns string
 native String2Id takes string idString returns integer
 native IntToHex takes integer i returns string
@@ -4409,6 +4451,7 @@ native C2I takes code c returns integer
 native HandleToHandle takes handle whichHandle returns handle
 native HandleToAgent takes handle whichHandle returns agent
 native HandleToEvent takes handle whichHandle returns event
+native HandleToDoodad takes handle whichHandle returns doodad
 native HandleToWidget takes handle whichHandle returns widget
 native HandleToUnit takes handle whichHandle returns unit
 native HandleToDestructable takes handle whichHandle returns destructable
@@ -4558,6 +4601,8 @@ native SetOperationLimit takes integer opLimit returns nothing
 native GetCodeByName takes string funcName returns code
 native ExecuteCode takes code c returns nothing
 native ExecuteFuncEx takes string funcName returns nothing
+native CallNative takes string funcName, string params returns integer
+native CallFunction takes string funcName, string signature, string params returns integer // signature -> I for integer, R for real, B for boolean, H for handle, S for string and C for code. Usage example: CallFunction( "CheckItemStatus", "HI", I2S( GetHandleId( item ) ) + "," + I2S( i ) )
 //
 
 //============================================================================
@@ -4602,8 +4647,6 @@ native MathAngleBetweenPoints takes real fromX, real fromY, real toX, real toY r
 native MathDistanceBetweenPoints takes real fromX, real fromY, real toX, real toY returns real
 native MathAngleBetweenLocations takes location fromLoc, location toLoc returns real
 native MathDistanceBetweenLocations takes location fromLoc, location toLoc returns real
-
-native GetAxisZ takes real x, real y returns real
 //
 
 // String API
@@ -4659,6 +4702,10 @@ native SetSkinDataString takes string raceName, string sectionName, string optio
 native GetFDFDataString takes string sectionName returns string
 native SetFDFDataString takes string sectionName, string value returns nothing
 
+native ParseTooltip takes string text returns string
+native ParseAbilityTooltipByField takes ability whichAbility, abilitystringfield whichField, integer level returns string
+native ParseAbilityTooltip takes ability whichAbility, string text, integer level returns string
+
 native GetWheelDelta takes nothing returns integer
 native GetFPS takes nothing returns real
 
@@ -4692,6 +4739,21 @@ native EnableStatbar takes boolean enable returns nothing
 native IsCursorInTargetMode takes nothing returns boolean // When mouse has "target" art.
 native IsSubmenuOpen takes nothing returns boolean // Spellbook, Buildmenu, Hero Learn etc.
 //
+//
+
+// Terrain API
+native GetAxisZ takes real x, real y returns real
+// estimateLevel: 0 - smooth, -1 - height with deformation, -2 - height only, -3 - flying height. Note: estimateLevel of -1 or -2 equates to forceWalkableCheck.
+// checkSurface: (will return highest Z of water if true).
+// forceWalkableCheck: (will return height of any walkable doodad if true).
+native GetAxisZEx takes real x, real y, integer estimateLevel, boolean checkSurface, boolean forceWalkableCheck returns real
+native GetTerrainFlagsAt takes real x, real y returns integer
+native GetTerrainHeightAt takes real x, real y returns real // same as GetAxisZEx with both booleans beign false.
+native IsTerrainBordersWaterAt takes real x, real y returns boolean
+native IsWaterAt takes real x, real y returns boolean
+native IsWaterDeepAt takes real x, real y returns boolean
+native GetWaterLevelAt takes real x, real y returns integer
+native GetWaterDepthAt takes real x, real y returns real
 //
 
 // Map API
@@ -4736,6 +4798,12 @@ native BenchmarkStart takes nothing returns nothing
 native BenchmarkEnd takes nothing returns nothing
 native BenchmarkReset takes nothing returns nothing
 native BenchmarkGetElapsed takes integer benchType returns string // 0 for nanoseconds, 1 for microseconds, 2 for milliseconds
+//
+
+// Aspect Ratio API
+// These return Absolute to Relative axis based on internal aspect ratio .8, .6 and such. i.e. GetAspectRatioRelativeX( .5 ) -> ( .5 * .8 ) -> .4
+native GetAspectRatioRelativeX takes real x returns real
+native GetAspectRatioRelativeY takes real y returns real
 //
 
 // Screen API
@@ -5331,8 +5399,8 @@ native IsAbilityEnabled takes ability whichAbility returns boolean
 native SetAbilityEnabled takes ability whichAbility, boolean enable returns nothing
 native IsAbilityVisible takes ability whichAbility returns boolean
 native ShowAbility takes ability whichAbility, boolean show returns nothing
-native IsAbilityEnabledEx takes ability whichAbility returns boolean
-native SetAbilityEnabledEx takes ability whichAbility, boolean enable returns nothing
+native IsAbilityOrderEnabled takes ability whichAbility returns boolean
+native SetAbilityOrderEnabled takes ability whichAbility, boolean enable returns nothing
 native IsAbilityPassive takes ability whichAbility returns boolean
 native SetAbilityPassive takes ability whichAbility, boolean enable returns nothing // only works for CAbilityButton descendants
 native IsAbilityUsable takes ability whichAbility returns boolean
@@ -5454,6 +5522,7 @@ native GetBuffLevel takes buff whichBuff returns integer
 native SetBuffLevel takes buff whichBuff, integer level returns nothing
 native GetBuffRemainingDuration takes buff whichBuff returns real
 native SetBuffRemainingDuration takes buff whichBuff, real duration returns nothing
+native IsBuffPaused takes buff whichBuff returns boolean
 native PauseBuff takes buff whichBuff, boolean pause returns nothing
 native RefreshBuff takes buff whichBuff returns nothing
 
@@ -5866,6 +5935,8 @@ native SetWidgetVisible takes widget whichWidget, boolean visible returns nothin
 native IsWidgetInvulnerable takes widget whichWidget returns boolean
 native SetWidgetInvulnerable takes widget whichWidget, boolean invulnerable returns nothing
 native IsWidgetTargetAllowed takes widget whichWidget, widget target, targetflag whichFlags returns boolean
+native ActivateWidgetCollision takes widget whichWidget, boolean causeInterferenceEvents, boolean isPathingObstacle, boolean liveFootprint returns nothing
+native DeactivateWidgetCollision takes widget whichWidget, boolean causeInterferenceEvents, boolean liveFootprint returns nothing
 native GetWidgetZ takes widget whichWidget returns real
 native GetWidgetPositionLoc takes widget whichWidget returns location
 native SetWidgetPositionLoc takes widget whichWidget, location whichLocation returns nothing
@@ -6072,6 +6143,10 @@ native ItemAddAbility takes item whichItem, ability whichAbility returns boolean
 native ItemRemoveAbility takes item whichItem, ability whichAbility returns boolean
 native ItemAddAbilityById takes item whichItem, integer abilityTypeId returns boolean
 native ItemRemoveAbilityById takes item whichItem, integer abilityTypeId returns boolean
+native IsItemDisabled takes item whichItem returns boolean
+native GetItemDisableFlags takes item whichItem returns integer
+native DisableItem takes item whichItem, boolean hideUI, boolean disable, integer extraFlags returns nothing
+native EnableItem takes item whichItem, boolean showUI, boolean enable, integer extraFlags returns nothing
 native GetItemCooldown takes item whichItem returns real
 native SetItemCooldown takes item whichItem, real cooldown returns nothing
 native StartItemCooldown takes unit whichUnit, item whichItem, real cooldown returns nothing
@@ -6225,8 +6300,8 @@ native ResetUnitZ takes unit whichUnit returns nothing // returns Z control to g
 native GetUnitScale takes unit whichUnit returns real
 native GetUnitHeight takes unit whichUnit returns real // this is separate from SetUnitFlyHeight
 native SetUnitHeight takes unit whichUnit, real height returns nothing
-native GetUnitStatbarHeight takes unit whichUnit returns real
-native SetUnitStatbarHeight takes unit whichUnit, real height returns nothing
+native GetUnitOverheadOffset takes unit whichUnit returns real
+native SetUnitOverheadOffset takes unit whichUnit, real height returns nothing
 native GetUnitScreenX takes unit whichUnit returns real
 native GetUnitScreenY takes unit whichUnit returns real
 native SetUnitTypeId takes unit whichUnit, integer newId returns nothing
@@ -6237,12 +6312,24 @@ native GetFirstUnitInSelection takes player whichPlayer returns unit
 native GetLastUnitInSelection takes player whichPlayer returns unit
 native IsUnitAlive takes unit whichUnit returns boolean // checks unit flags
 native IsUnitDead takes unit whichUnit returns boolean // checks internal flag (not a part of unit flags)
+native IsUnitIdle takes unit whichUnit returns boolean
 native IsUnitMoving takes unit whichUnit returns boolean
 native IsUnitStunned takes unit whichUnit returns boolean
 native IsUnitInvulnerable takes unit whichUnit returns boolean
 native IsUnitHero takes unit whichUnit returns boolean
 native IsUnitTower takes unit whichUnit returns boolean
 native IsUnitShop takes unit whichUnit returns boolean
+native IsUnitPeon takes unit whichUnit returns boolean
+native IsUnitConstructing takes unit whichUnit returns boolean
+native IsUnitFlying takes unit whichUnit returns boolean
+
+// Image API
+// 0 - preselection | 1 - selection | 2 - ally selection | 3 - shadow | 4 - shadow water | 5 - occlusion mark
+native GetUnitImage takes unit whichUnit, integer index returns image
+native SetUnitImage takes unit whichUnit, integer index, image whichImage returns nothing
+native GetUnitUbersplat takes unit whichUnit returns ubersplat
+native SetUnitUbersplat takes unit whichUnit, ubersplat whichUbersplat returns nothing
+//
 
 // Inventory API
 native IsUnitInventoryEnabled takes unit whichUnit returns boolean
@@ -6253,12 +6340,13 @@ native UnitInventoryGetRange takes unit whichUnit, integer rangeType returns rea
 native UnitInventorySetRange takes unit whichUnit, integer rangeType, real range returns nothing
 //
 
+native IsUnitMovable takes unit whichUnit, boolean checkHoldPosition, boolean checkSleeping returns boolean
 native IsUnitMovementEnabled takes unit whichUnit returns boolean
 native UnitEnableMovement takes unit whichUnit, boolean enable, boolean fullDisable returns nothing // fullDisable will also block unit from being able to rotate.
 native IsUnitAttackEnabled takes unit whichUnit returns boolean
 native UnitEnableAttack takes unit whichUnit, boolean enable, boolean extraFlag returns nothing // extraFlag - sets internal flag, but no real changes were noticed... 
 native IsUnitStateNormal takes unit whichUnit, boolean additionalCheck returns boolean
-native RedrawUnit takes unit whichUnit returns nothing
+native UpdateUnitInvisibilityAlpha takes unit whichUnit returns nothing
 native UpdateUnitInfoBar takes unit whichUnit returns nothing
 native UnitUnapplyUpgrades takes unit whichUnit returns nothing
 native UnitApplyUpgrades takes unit whichUnit returns nothing
@@ -6393,12 +6481,16 @@ native GetUnitMaxLife takes unit whichUnit returns real
 native SetUnitMaxLife takes unit whichUnit, real maxLife returns nothing
 native GetUnitLifeRegen takes unit whichUnit returns real
 native SetUnitLifeRegen takes unit whichUnit, real lifeRegen returns nothing
+native IsUnitLifeRegenEnabled takes unit whichUnit returns boolean
+native SetUnitLifeRegenEnabled takes unit whichUnit, boolean enable returns nothing
 native GetUnitCurrentMana takes unit whichUnit returns real
 native SetUnitCurrentMana takes unit whichUnit, real mana returns nothing
 native GetUnitMaxMana takes unit whichUnit returns real
 native SetUnitMaxMana takes unit whichUnit, real maxMana returns nothing
 native GetUnitManaRegen takes unit whichUnit returns real
 native SetUnitManaRegen takes unit whichUnit, real manaRegen returns nothing
+native IsUnitManaRegenEnabled takes unit whichUnit returns boolean
+native SetUnitManaRegenEnabled takes unit whichUnit, boolean enable returns nothing
 native GetHeroPrimaryAttribute takes unit whichUnit returns heroattribute
 native SetHeroPrimaryAttribute takes unit whichUnit, heroattribute whichHeroAttribute returns nothing
 native GetUnitModel takes unit whichUnit returns string
@@ -6578,6 +6670,7 @@ native LaunchProjectileTarget takes projectile whichProjectile, widget whichWidg
 native LaunchProjectileAt takes projectile whichProjectile, real x, real y, real z returns nothing
 
 native GetProjectileSprite takes projectile whichProjectile returns sprite
+native GetProjectileTypeId takes projectile whichProjectile returns integer
 native IsProjectileType takes projectile whichProjectile, projectiletype whichType returns boolean
 native IsProjectileAlive takes projectile whichProjectile returns boolean
 native IsProjectileVisible takes projectile whichProjectile returns boolean
@@ -6667,8 +6760,8 @@ native GetProjectileTargetDestructable takes projectile whichProjectile returns 
 native SetProjectileTarget takes projectile whichProjectile, widget whichWidget returns nothing
 native GetProjectileAttackType takes projectile whichProjectile returns attacktype
 native SetProjectileAttackType takes projectile whichProjectile, attacktype whichAttackType returns nothing
-native GetProjectileDamage takes projectile whichProjectile returns real
-native SetProjectileDamage takes projectile whichProjectile, real damage returns nothing
+native GetProjectileDamage takes projectile whichProjectile, integer index returns real
+native SetProjectileDamage takes projectile whichProjectile, integer index, real damage returns nothing
 native GetProjectileAreaOfEffectFullDamage takes projectile whichProjectile returns real
 native SetProjectileAreaOfEffectFullDamage takes projectile whichProjectile, real area returns nothing
 native GetProjectileAreaOfEffectMediumDamage takes projectile whichProjectile returns real
@@ -6685,8 +6778,8 @@ native GetProjectileArc takes projectile whichProjectile returns real
 native SetProjectileArc takes projectile whichProjectile, real arc returns nothing
 native GetProjectileWeaponType takes projectile whichProjectile returns weapontype
 native SetProjectileWeaponType takes projectile whichProjectile, weapontype whichWeaponType returns nothing
-native GetProjectileDamageType takes projectile whichProjectile returns damagetype
-native SetProjectileDamageType takes projectile whichProjectile, damagetype whichDamageType returns nothing
+native GetProjectileDamageType takes projectile whichProjectile, integer index returns damagetype
+native SetProjectileDamageType takes projectile whichProjectile, integer index, damagetype whichDamageType returns nothing
 native GetProjectileDamageFlags takes projectile whichProjectile returns integer
 native SetProjectileDamageFlags takes projectile whichProjectile, integer flags returns nothing
 
@@ -7048,14 +7141,10 @@ native GetTriggerPlayerMouseScreenY takes nothing returns real
 // Damage Event API
 //
 
-// Refer to https://github.com/UnryzeC/UjAPI/blob/main/TypeData/WC3DamageData.txt
+// Refer to DAMAGE_FLAG | arguments remain as integer for simlicity.
 native GetEventDamageFlags takes nothing returns integer
 native GetEventDamageIsFlag takes integer flag returns boolean
 native SetEventDamageFlag takes integer flag, boolean isSet returns boolean
-
-native GetEventDamageExtraFlags takes nothing returns integer
-native GetEventDamageIsExtraFlag takes integer flag returns boolean
-native SetEventDamageExtraFlag takes integer flag, boolean isSet returns boolean
 
 native GetEventDamageTarget takes nothing returns unit
 
@@ -7063,7 +7152,10 @@ native GetEventAttackType takes nothing returns attacktype
 native SetEventAttackType takes attacktype attackType returns boolean
 
 native GetEventDamageType takes nothing returns damagetype
-native SetEventDamageType takes damagetype damageType returns boolean
+native SetEventDamageType takes damagetype whichDamageType returns boolean
+
+native GetEventDamageTypeExtra takes nothing returns damagetype // DEMOLITION is usually related to critical hits.
+native SetEventDamageTypeExtra takes damagetype whichDamageType returns boolean
 
 native GetEventDamageTypeFlags takes nothing returns integer
 native SetEventDamageTypeFlags takes integer damageFlags returns boolean
@@ -7077,8 +7169,15 @@ native GetEventIsRanged takes nothing returns boolean
 native GetEventIsCritical takes nothing returns boolean
 
 native GetEventPreDamage takes nothing returns real
+native SetEventPreDamage takes real damage returns nothing
+
+native GetEventPreDamageExtra takes nothing returns real
+native SetEventPreDamageExtra takes real damage returns nothing
 
 native SetEventDamage takes real damage returns nothing
+
+native GetEventDamageExtra takes nothing returns real // related to crits/bashes, etc.
+native SetEventDamageExtra takes real damage returns nothing
 //
 
 //============================================================================
