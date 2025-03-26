@@ -6138,6 +6138,7 @@ native SetItemMaxLife takes item whichItem, real maxLife returns nothing
 native GetItemMaxCharges takes item whichItem returns integer
 native SetItemMaxCharges takes item whichItem, integer charges returns nothing
 native GetItemAbilityById takes item whichItem, integer abilityTypeId returns ability
+native GetItemAbilityByIdEx takes item whichItem, integer abilityTypeId, integer index returns ability
 native GetItemAbilityByIndex takes item whichItem, integer index returns ability
 native ItemAddAbility takes item whichItem, ability whichAbility returns boolean
 native ItemRemoveAbility takes item whichItem, ability whichAbility returns boolean
@@ -6149,7 +6150,7 @@ native DisableItem takes item whichItem, boolean hideUI, boolean disable, intege
 native EnableItem takes item whichItem, boolean showUI, boolean enable, integer extraFlags returns nothing
 native GetItemCooldown takes item whichItem returns real
 native SetItemCooldown takes item whichItem, real cooldown returns nothing
-native StartItemCooldown takes unit whichUnit, item whichItem, real cooldown returns nothing
+native StartItemCooldown takes item whichItem, real cooldown returns nothing
 native GetItemRemainingCooldown takes item whichItem returns real
 native SetItemRemainingCooldown takes item whichItem, real cooldown returns nothing
 native GetItemPlayerColour takes item whichItem returns playercolor
@@ -6358,7 +6359,7 @@ native UnitRemoveAbilityEx takes unit whichUnit, integer abilityTypeId, boolean 
 native CountUnitAbilities takes unit whichUnit, boolean alsoCountBuffs returns integer
 native CountUnitAbilitiesWithTypeId takes unit whichUnit, boolean alsoCountBuffs, integer abilityTypeId returns integer
 native GetUnitAbility takes unit whichUnit, integer abilityTypeId returns ability
-native GetUnitAbilityEx takes unit whichUnit, integer abilityTypeId, integer id returns ability // Allows you to search through duplicates.
+native GetUnitAbilityEx takes unit whichUnit, integer abilityTypeId, integer id returns ability	// Allows you to search through duplicates.
 native GetUnitAbilityByIndex takes unit whichUnit, integer index returns ability
 native IsUnitAbilityVisible takes unit whichUnit, integer abilityTypeId returns boolean
 native ShowUnitAbility takes unit whichUnit, integer abilityTypeId, boolean show returns nothing
@@ -6383,10 +6384,20 @@ native GetUnitBuffByIndex takes unit whichUnit, integer index returns buff
 native GetUnitBuffLevel takes unit whichUnit, integer buffTypeId returns integer
 //
 
+// Unit Item API
+native GetUnitItemSlots takes unit whichUnit returns integer
+native SetUnitItemSlots takes unit whichUnit, integer itemSlots returns nothing
+native GetUnitItem takes unit whichUnit, integer itemTypeId returns item
+native GetUnitItemEx takes unit whichUnit, integer itemTypeId, integer index returns item
+//
+
+// Unit Timed Life API
 native UnitCancelTimedLife takes unit whichUnit returns nothing
 native UnitRestartTimedLife takes unit whichUnit returns nothing
 native GetUnitRemainingTimedLife takes unit whichUnit returns real
 native SetUnitRemainingTimedLife takes unit whichUnit, real duration returns nothing
+//
+
 native IsUnitGhosted takes unit whichUnit returns boolean
 native SetUnitGhosted takes unit whichUnit, boolean state, real transitionTime returns nothing // This is similar to Invisibility, but uses Ghost (Agho) as base logic, just like windwalk. Attacking from this state does not cause the unit to exit Ghost state.
 native IsUnitSelectable takes unit whichUnit returns boolean
@@ -6509,8 +6520,6 @@ native GetUnitPathingAIType takes unit whichUnit returns pathingaitype
 native SetUnitPathingAIType takes unit whichUnit, pathingaitype pathingAIType returns nothing
 native GetUnitPathingType takes unit whichUnit returns pathingtype
 native SetUnitPathingType takes unit whichUnit, pathingtype pathingType returns nothing
-native GetUnitItemSlots takes unit whichUnit returns integer
-native SetUnitItemSlots takes unit whichUnit, integer itemSlots returns nothing
 native SetUnitFacingEx takes unit whichUnit, real facing, boolean isInstant returns nothing
 native SetUnitFacingInstant takes unit whichUnit, real facing returns nothing
 native GetUnitMinimapX takes unit whichUnit returns real
